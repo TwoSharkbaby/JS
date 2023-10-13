@@ -180,34 +180,141 @@ function _go(arg) {
 //   )
 // );
 
-_go(
-  users,
-  function (users) {
-    return _filter(users, function (user) {
-      return user.age >= 30;
-    });
-  },
-  function (users) {
-    return _map(users, _get("name"));
-  },
-  console.log
-);
+// _go(
+//   users,
+//   function (users) {
+//     return _filter(users, function (user) {
+//       return user.age >= 30;
+//     });
+//   },
+//   function (users) {
+//     return _map(users, _get("name"));
+//   },
+//   console.log
+// );
 
 var _map = _curryr(_map),
   _filter = _curryr(_filter);
 
-_go(
-  users,
-  _filter(function (user) {
-    return user.age >= 30;
-  }),
-  _map(_get("name")),
-  console.log
-);
+// _go(
+//   users,
+//   _filter(function (user) {
+//     return user.age >= 30;
+//   }),
+//   _map(_get("name")),
+//   console.log
+// );
 
-_go(
-  users,
-  _filter((user) => user.age >= 30),
-  _map(_get("name")),
-  console.log
-);
+// _go(
+//   users,
+//   _filter((user) => user.age >= 30),
+//   _map(_get("name")),
+//   console.log
+// );
+
+function _curryr(fn) {
+  return function (a, b) {
+    return arguments.length == 2
+      ? fn(a, b)
+      : function (b) {
+          return fn(b, a);
+        };
+  };
+}
+
+var _get = _curryr(function (obj, key) {
+  return obj == null ? undefined : obj[key];
+});
+
+// var _length = _get("length");
+
+// function _each(list, iter) {
+//   for (var i = 0, len = _length; i < len; i++) {
+//     iter(list[i]);
+//   }
+//   return list;
+// }
+
+// _each(null, console.log);
+
+// console.log(
+//   _map(null, function (val) {
+//     return val;
+//   })
+// );
+
+// console.log(
+//   _filter(null, function (val) {
+//     return val;
+//   })
+// );
+
+// console.log(Object.keys({ name: "ID", age: 33 }));
+// console.log(Object.keys([1, 2, 3, 4]));
+// console.log(Object.keys(10));
+// console.log(Object.keys(null));
+
+function _is_object(obj) {
+  return typeof obj == "object" && !!obj;
+}
+
+function _keys(obj) {
+  return _is_object(obj) ? Object.keys(obj) : [];
+}
+
+// console.log(_keys({ name: "ID", age: 33 }));
+// console.log(_keys([1, 2, 3, 4]));
+// console.log(_keys(10));
+// console.log(_keys(null));
+
+function _each(list, iter) {
+  var keys = _keys(list);
+  for (var i = 0, len = keys.length; i < len; i++) {
+    iter(list[keys[i]]);
+  }
+  return list;
+}
+
+// _each(
+//   {
+//     13: "ID",
+//     19: "HD",
+//     29: "YD",
+//   },
+//   function (name) {
+//     console.log(name);
+//   }
+// );
+
+// console.log(
+//   _map(
+//     {
+//       13: "ID",
+//       19: "HD",
+//       29: "YD",
+//     },
+//     function (name) {
+//       return name.toLowerCase();
+//     }
+//   )
+// );
+
+// _go(
+//   {
+//     13: "ID",
+//     19: "HD",
+//     29: "YD",
+//   },
+//   _map(function (name) {
+//     return name.toLowerCase();
+//   }),
+//   console.log
+// );
+
+// _go(
+//   null,
+//   _map(function (name) {
+//     return name.toLowerCase();
+//   }),
+//   console.log
+// );
